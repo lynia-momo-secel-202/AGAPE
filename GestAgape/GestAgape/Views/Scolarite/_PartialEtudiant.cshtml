@@ -1,0 +1,59 @@
+﻿@using GestAgape.Core.Entities.Parametrage;
+@model IEnumerable<GestAgape.Core.Entities.Scolarite.Inscription>
+
+@{
+    int i = 1;
+
+}@*tableau a imprimer*@
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <marquee style="color: rgb(0,94,0)"><em> Aller dans "Détails" pour effectuer un paiement ou toute autre opération sur un étudiant</em> </marquee>
+            <div class="card-box table-responsive">
+                <table id="datatable-buttons" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th>Matricule</th>
+                            <th>Nom (s) & Prénom (s)</th>
+                            <th>Cycle</th>
+                            <th>Filière</th>
+                            <th>Niveau</th>
+                            <th>Date d'Inscription</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var item in Model)
+                        {
+                                <tr>
+                                    <td> @i </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Matricule.LibelleMatricule) </td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Nom) @Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Prenom)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Cycle.Code)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Filiere.Libelle)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Niveau.Libelle)</td>
+                                    <td>@item.ModifiedDate.ToShortDateString()</td>
+                                    <td>
+                                        <a asp-action="DetailEtudiant" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Détails sur l'étudiant" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px;">
+                                            <i class="fa fa-eye"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a asp-action="UpdateEtudiant" type="button" data-placement="top" data-toggle="tooltip" data-original-title=" mettre à jour l'étudiant" asp-route-id="@item.DemandeAdmission.Candidat.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a asp-action="CreatePaiementScolarite" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais de scolarité" asp-route-id="@item.Id" style="color:#F99910;; font-size:20px;">
+                                            <i class="fa fa-money"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+
+</div>

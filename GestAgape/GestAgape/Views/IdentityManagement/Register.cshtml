@@ -1,0 +1,219 @@
+﻿@model GestAgape.Core.ViewModels.RegisterVM
+
+@{
+    ViewData["Module"] = "Paramétrage";
+    ViewData["Title"] = "Création d'un utilisateur";
+}
+@* <link href="~/css/login.css" rel="stylesheet" /> *@
+
+<div class="container-fluid">
+    <div style="display: block; margin:0px auto;">
+        <form asp-action="Register" enctype="multipart/form-data">
+            <div id="response_message_case"></div>
+            <img style="display:block; margin: 0px auto;" id="loader" src="~/img/loader.gif">
+            <!-- LastName , FirstName et PhoneNumber -->
+            <div class="form-outline form-group row">
+                <div class="form-outline col-md-4">
+                    <label asp-for="FirstName" class="form-label">Nom (s) <span class="text-danger">*</span></label>
+                    <input asp-for="FirstName" class="form-control form-control-sm"
+                           placeholder="Entrez prénom de l'utilisateur" />
+                </div>
+                <div class="form-outline col-md-4">
+                    <label asp-for="LastName" class="form-label">Prénom(s) <span class="text-danger">*</span></label>
+                    <input asp-for="LastName" class="form-control form-control-sm"
+                           placeholder="Entrez le nom de l'utilisateur" />
+                </div>
+                <div class="form-outline col-md-4 ">
+                    <label asp-for="PhoneNumber" class="form-label">Téléphone <span class="text-danger">*</span></label>
+                    <input asp-for="PhoneNumber" class="form-control form-control-sm"
+                           placeholder="Numéro de téléphone" />
+                </div>
+            </div>
+
+            <!-- photo de profil , CV et sexe -->
+            <div class="form-outline form-group row">
+                <div class="form-outline col-md-5">
+                    <label asp-for="ProfilePicture" class="form-label">Photo</label>
+                    <input asp-for="ProfilePicture" class="form-control form-control-sm" />
+                </div>
+
+                <div class="form-outline col-md-5">
+                    <label asp-for="CurriculumVitae" class="form-label">Curriculum Vitae</label>
+                    <input asp-for="CurriculumVitae" class="form-control form-control-sm" />
+                </div>
+
+                <div class="form-outline col-md-2">
+                    <label asp-for="Sexe" class="form-label">Sexe </label>
+                    <select asp-for="Sexe" class="form-control form-control-sm">
+                        <option> Masculin </option>
+                        <option> Feminin </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-outline form-group row">
+                <div class="form-outline col-md-4">
+                    <label asp-for="Email" class="form-label">Adresse e-mail  <span class="text-danger">*</span></label>
+                    <input asp-for="Email" type="email" class="form-control form-control-sm"
+                           placeholder="Entrez l'adresse email de l'utilisateur" />
+                </div>
+
+                <div class="form-outline col-md-4">
+                    <label asp-for="Password" class="form-label" for="form2Example22">Mot de passe <span class="text-danger">*</span></label>
+                    <input asp-for="Password" placeholder="Entrez votre mot de passe" type="password" class="form-control form-control-sm" />
+                </div>
+
+                <div class="form-outline col-md-4">
+                    <label asp-for="ConfirmedPassword" class="form-label">Confirmation mot de passe <span class="text-danger">*</span></label>
+                    <input asp-for="ConfirmedPassword" placeholder="Entrez le même mot de passe" type="password" class="form-control form-control-sm" />
+                </div>
+            </div>
+
+            <!--Nationalite , Date de Naissance et Lieu de Naissance -->
+            <div class="form-outline form-group row">
+                <div class="form-outline col-md-6">
+                    <label asp-for="DateNaissance" class="form-label">Date de Naissance</label>
+                    <input asp-for="DateNaissance" max="@DateTime.Now.AddYears(-16).ToString("yyyy-MM-ddThh:mm")" class="form-control form-control-sm" />
+                </div>
+
+                <div class="form-outline col-md-6">
+                    <label asp-for="LieuNaissance" class="form-label">Lieu de Naissance</label>
+                    <input asp-for="LieuNaissance" placeholder="Entrez le lieu de naissance" class="form-control form-control-sm" />
+                </div>
+            </div>
+
+            <!--Region et Langue -->
+            <div class="form-outline form-group row">
+                <div class="form-outline col-md-4">
+                    <label asp-for="Nationalite" class="form-label">Nationalité </label>
+                    <input asp-for="Nationalite" class="form-control form-control-sm"
+                           placeholder="Entrez la Nationalité" />
+                </div>
+                <div class="form-outline col-md-4">
+                    <label asp-for="Langue" class="form-label">Langue</label>
+                    <input asp-for="Langue" class="form-control form-control-sm" />
+                </div>
+                <div class="form-outline col-md-4">
+                    <label asp-for="StatutMatrimonial" class="form-label">Statut Matrimonial </label>
+                    <select asp-for="StatutMatrimonial" class="form-control form-control-sm">
+                        <option disabled>selectionne le statut matrimonial</option>
+                        <option value="Celibataire">Celibataire</option>
+                        <option value="Marié(e)">Marié(e)</option>
+                        <option value="Veuve">Veuve</option>
+                        <option value="Divorcé">Divorcé</option>
+                    </select>
+                </div>
+            </div>
+            <!--Affectation Campus et roles -->
+            <div class="form-outline form-group row">
+
+                <div class="form-outline col-md-6">
+                    <label asp-for="Campus">Campus</label>
+                    <select class="form-control" asp-for="Campus">
+                        @foreach (var campus in ViewBag.Campus)
+                        {
+                            <option value="@campus.Id">@campus.Nom</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-outline col-md-6">
+                    <label asp-for="Roles">Role(s)</label> <br />
+                    <select asp-for="Roles" asp-items="@Html.GetEnumSelectList<GestAgape.Core.Entities.Identity._enumAppRoles>()" class="form-control">
+                    </select>
+                </div>
+            </div>
+
+            <div class="text-center pt-1 mb-5 pb-1">
+                <input class="btn btn-block" style="background-color: #22a9e1; color:white;" type="submit" value="Enregistrer" tabindex="3" />
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#Roles').select2();
+        $('#Campus').select2();
+    });
+    const formElem = document.querySelector("form");
+    $("#loader").hide();
+    $('form').submit(function (e) {
+        $("#loader").show();
+        let errorMessages = "";
+        e.preventDefault();
+        //Swal.fire('Any fool can use a computer')
+        var data = $('form').serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+
+        data.Roles = $("#Roles").val();
+        data.Campus = $("#Campus").val();
+        data.ProfilePicture = $('input[type=file]')[0].files[0];
+        data.CurriculumVitae = $('input[type=file]')[1].files[0];
+
+        axios({
+            url: "@Url.Action("Register", "IdentityManagement")",
+            method: 'POST',
+            data: data,
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        })
+            .then(response => {
+                if (response.data.isValid == true) {
+                    Swal.fire(
+                        'Réussi',
+                        response.data.message,
+                        'success'
+                    );
+                    window.location.href = "@Url.Action("Login", "IdentityManagement")";
+                    $("#loader").hide();
+
+                } else {
+                    Swal.fire(
+                        'Echec',
+                        response.data.message,
+                        'warning'
+                    );
+                    $("#response_message_case").html('<div class="alert alert-warning" role="alert" id="response_message_case">' + response.data.message + '</div>');
+                    $("#loader").hide();
+                }
+
+                console.log("OK", response);
+            })
+            .catch(error => {
+                console.log(error);
+
+                for (let err of error.response.data.validationMessages) {
+                    errorMessages += err + "</br>";
+                }
+                Swal.fire(
+                    'Echec',
+                    error.response.message,
+                    'error'
+                );
+                $("#response_message_case").html('<div class="alert alert-danger" role="alert" id="response_message_case">' + errorMessages + '</div>');
+                $("#loader").hide();
+
+            });
+        return false;
+
+    });
+</script>
+
+<!-- response -->
+<style>
+
+    #response_message_case {
+        font-size: 12px;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

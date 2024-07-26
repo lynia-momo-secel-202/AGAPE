@@ -1,0 +1,88 @@
+﻿@model IEnumerable<GestAgape.Core.Entities.Parametrage.Affectation>
+
+@{
+    ViewData["Module"] = "Admission";
+    ViewData["Title"] = "Liste des utilisateurs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string>? Id = new List<string>();
+    bool trouve = false;
+    int i = 1;
+}
+
+<a asp-controller="IdentityManagement" asp-action="Register">
+    <svg style="height:25px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#22a9e1">
+        <path d="m256 8c-137 0-248 111-248 248s111 248 248 248 248-111 248-248-111-248-248-248zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12z" />
+    </svg>
+    </a>
+    <div class="x_content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box table-responsive">
+
+                    <table id="datatable" class="table table-striped table-bordered table-sm" style="width:100%">
+                        <thead>
+                            <tr style="color: #22a9e1;">
+                                <th>#</th>
+                                <th> Utilisateur</th>
+                                <th> Email</th>
+                                <th> Liste des campus</th>
+                                    @* <th>Actions</th> *@
+                            </tr>
+                        </thead>
+
+
+                        <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    @foreach (var id in Id)
+                                    {
+                                        if (id == item.UserId)
+                                        {
+                                            trouve = true;
+                                            break;
+                                        }
+                                    }
+                                    if (trouve == false)
+                                    {
+                                    <tr>
+                                        <td scope="row"> @i </td>
+                                        <td>
+                                        @Html.DisplayFor(modelItem => item.User.FirstName)  @Html.DisplayFor(modelItem => item.User.LastName)
+                                        </td>
+                                        <td>
+                                                @Html.DisplayFor(modelItem => item.User.UserName)
+                                        </td>
+                                        <td>
+                                                @foreach (var aff in Model)
+                                                {
+                                                    if (aff.UserId == item.UserId)
+                                                    {
+                                                        @* <span>-</span> *@ @Html.DisplayFor(modelItem => aff.Campus.Nom)
+
+                                                    <span>-</span>
+                                                        @*   <br /> *@
+                                                    }
+                                                }
+                                        </td>
+
+                                            @* <td>
+                                <a asp-action="DetailsUser" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Voir l'utilisateur" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px;">
+                                <i class="fa fa-eye"></i>
+                                </a>
+                                <a asp-action="UpdateUser" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Completer les information de l'utilisateur" asp-route-id="@item.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                <i class="fa fa-edit"></i>
+                                </a>
+                                </td> *@
+                                    </tr>
+                                        Id.Add(item.UserId);
+                                        i++;
+                                    }
+                                    trouve = false;
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+

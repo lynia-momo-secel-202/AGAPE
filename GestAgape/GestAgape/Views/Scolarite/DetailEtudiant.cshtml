@@ -1,0 +1,160 @@
+﻿@using GestAgape.Core.Entities.Identity
+@using GestAgape.Core.Entities.Admission
+@using GestAgape.Core.Entities.Scolarite
+@model GestAgape.Core.Entities.Scolarite.Inscription
+
+@{
+    ViewData["Title"] = "Vue d'ensemble sur l'étudiant" + " " + @Model.DemandeAdmission.Candidat.Personne.Nom + " " + @Model.DemandeAdmission.Candidat.Personne.Prenom;
+    ViewData["Module"] = "Scolarité";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_content">
+                @*//details user template*@
+                <div class="col-md-3 col-sm-3  profile_left">
+                    <div class="profile_img">
+                        @*  <div id="crop-avatar">
+                        <!-- Current avatar -->
+                        @if (Model.DossierPersonnel.Photos != null)
+                        {
+                        <img src=@Url.Content($"~/Data/DossierFolder/{ Model.DossierPersonnel.Photos}") alt="Avatar" title="Change the avatar" class="img-responsive avatar-view" width="212px" height="212px" />
+                        }
+                        else
+                        {
+                        <img src="~/img/avatars/avatar.png" alt="Avatar" title="Change the avatar" class="img-responsive avatar-view" width="212px" height="212px" />
+                        }
+                        </div> *@
+
+                    </div>
+                    <h3 class="prod_title" style="font-weight:bold;font-size:xx-large"> @Model.DemandeAdmission.Candidat.Personne.Nom @Model.DemandeAdmission.Candidat.Personne.Prenom </h3>
+
+                    <h5 class="prod_title" style="font-weight:bold;"> Matricule : @Model.Matricule.LibelleMatricule</h5>
+
+                    <ul class="list-unstyled user_data">
+                        <li>
+                            <i class="fa fa-venus-mars"></i> Sexe : @Model.DemandeAdmission.Candidat.Personne.Sexe
+                        </li>
+                        <li>
+                            <i class="fa fa-calendar"></i> Date de Naissance: @Model.DemandeAdmission.Candidat.Personne.DateNaissance
+                        </li>
+                        <li>
+                            <i class="fa fa-location-arrow"></i> Nationalite : @Model.DemandeAdmission.Candidat.Personne.Nationalite
+                        </li>
+                        <li>
+                            <i class="fa fa-map-marker user-profile-icon"></i> Lieu de naissance : @Model.DemandeAdmission.Candidat.Personne.LieuNaissance
+                        </li>
+                        <li>
+                            <i class="fa fa-tag"></i>Statut Matrimonial: @Model.DemandeAdmission.Candidat.Personne.StatutMatrimonial
+                        </li>
+                        <li>
+                            <i class="fa fa-registered"></i> Region : @Model.DemandeAdmission.Candidat.Personne.Region
+                        </li>
+                        <li>
+                            <i class="fa fa-language"></i> Langue : @Model.DemandeAdmission.Candidat.Personne.Langue
+                        </li>
+                        <li>
+                            <i class="fa fa--wheelchair"></i>handicapé : @Model.DemandeAdmission.Candidat.Personne.Handicape
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope"></i>Email : @Model.DemandeAdmission.Candidat.Personne.Email
+                        </li>
+                        <li>
+                            <i class="fa fa-phone"></i>Telephone : @Model.DemandeAdmission.Candidat.Personne.Telephone
+                        </li>
+                    </ul>
+                    <div class="form-group col-md-12">
+                        <a asp-action="Etudiant" data-placement="top" data-toggle="tooltip" data-original-title="Liste des Candidat" style="float: left;">
+
+                            <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 width="40px" height="40px" viewBox="0 0 46.032 46.033"
+                                 xml:space="preserve">
+                            <g>
+                            <g>
+                            <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#e81d27" />
+                            <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#e81d27" />
+                                            </g>
+                                            </g>
+                                        </svg>
+                        </a>
+                        </a>
+                        <a asp-action="UpdateEtudiant" action="font-size: 25px;" asp-route-Id="@Model.DemandeAdmission.CandidatId" data-placement="top" data-toggle="tooltip" data-original-title="Modifier cet étudiant" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-edit m-right-xs"></i> Modifier</a>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-9 ">
+
+                    @*<div class="profile_title">
+
+                    </div>*@
+                    <div class="form-group row col-12">
+
+                        <div class="col-md-12">
+                            <div class="form-group row col-12">
+                                <div class="form-group col-4">
+                                    <label class="control-label"> Vision</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.Vision" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.Quartier" class="control-label">Quartier</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.Quartier" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.Etablissement" class="control-label">Etablissement</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.Etablissement" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group row col-12">
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.NomMere" class="control-label">Nom de la mère</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.NomMere" class="form-control" readonly />
+                                </div>
+
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.ProfessionMere" class="control-label">Profession de la mère</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.ProfessionMere" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.TelephoneMere" class="control-label">Téléphone de la mère</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.TelephoneMere" class="form-control" readonly />
+                                </div>
+                            </div>
+
+                            <div class="form-group row col-12">
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.NomPere" class="control-label"> Nom du père</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.NomPere" class="form-control" readonly />
+                                </div>
+
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.ProfessionPere" class="control-label">Profession du père</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.ProfessionPere" class="form-control" readonly />
+                                </div>
+                                <div class="form-group col-4">
+                                    <label asp-for="@Model.DemandeAdmission.Candidat.TelephonePere" class="control-label">Téléphone du père</label>
+                                    <input asp-for="@Model.DemandeAdmission.Candidat.TelephonePere" class="form-control" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a asp-action="CreatePaiementScolarite" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais de scolarité" class="btnperso mt-5" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-money  m-right-xs"></i>  Payer les frais de scolarité </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a asp-action="CreatePaiementFraisMedicaux" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais médicaux" class="btnperso mt-5" style="background-color: #e81d27; border: #e81d27;float: right;"><i class="fa  fa-hospital-o m-right-xs"></i>  Payer les frais médicaux </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    <a asp-action="CreatePaiementFraisSoutenance" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais de soutenance " class="btnperso mt-5" style="background-color: #e81d27; border: #e81d27;float: right;"><i class="fa fa-graduation-cap m-right-xs"></i>  Payer les frais de soutenance </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;  <a asp-action="CreatePaiementFraisDossierExamen" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais d'examen" class="btnperso mt-5" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-book m-right-xs"></i>  Payer les frais d'examen </a>&nbsp;&nbsp;&nbsp;&nbsp;
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <a asp-action="CreateChangementCampus" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Changer le campus" class="btnperso mt-5" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-edit m-right-xs"></i>  Changer le campus de cet étudiant </a>
+                            &nbsp;&nbsp; <a asp-action="CreateChangementFiliere" asp-route-Id="@Model.Id" data-placement="top" data-toggle="tooltip" data-original-title="Changer la spécialité" class="btnperso mt-5" style="background-color: #e81d27; border: #e81d27;float: right;"><i class="fa fa-edit m-right-xs"></i>  Changer la spécialité de cet étudiant </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*22a9e1*@

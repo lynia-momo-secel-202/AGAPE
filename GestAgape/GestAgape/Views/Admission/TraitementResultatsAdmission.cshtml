@@ -1,0 +1,178 @@
+﻿@model GestAgape.Core.Entities.Admission.DemandeAdmission
+
+@{
+    ViewData["Title"] = "Traitement des resulltatsResultatsAdmission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>TraitementResultatsAdmission</h2>
+
+<h4>DemandeAdmission</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="TraitementResultatsAdmission">
+
+                                        <div class="form-group row">
+                                <label asp-for="TypeAdmission" class="col-form-label col-md-3 col-sm-3 label-align"><span style ="color:#22a9e1; font-weight:700">Souhaite une Admission </span></label>
+                                <div class="col-md-6 col-sm-6 ">
+                                    <div id="gender" class="btn-group">
+                                        @*data-toggle="buttons"*@
+                                        <label >
+                                            <input asp-for="TypeAdmission" type="radio" value="Concours" class="join-btn" onclick="affetape4('visible');"> Par concours
+                                        </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div id="gender" class="btn-group">
+                                        <label>
+                                            <input asp-for="TypeAdmission" type="radio" value="EtudeDossier" class="join-btn" onclick="affetape4('hidden');"> Par étude de dossier
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Decision" class="control-label"></label>
+                <select asp-for="Decision" class="form-control"></select>
+                <span asp-validation-for="Decision" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mention" class="control-label"></label>
+                <input asp-for="Mention" class="form-control" />
+                <span asp-validation-for="Mention" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeAdmission" class="control-label"></label>
+                <select asp-for="TypeAdmission" class="form-control"></select>
+                <span asp-validation-for="TypeAdmission" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CandidatId" class="control-label"></label>
+                <select asp-for="CandidatId" class="form-control" asp-items="ViewBag.CandidatId"></select>
+                <span asp-validation-for="CandidatId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConcoursId" class="control-label"></label>
+                <select asp-for="ConcoursId" class="form-control" asp-items="ViewBag.ConcoursId"></select>
+                <span asp-validation-for="ConcoursId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AnneeAcademiqueId" class="control-label"></label>
+                <select asp-for="AnneeAcademiqueId" class="form-control" asp-items="ViewBag.AnneeAcademiqueId"></select>
+                <span asp-validation-for="AnneeAcademiqueId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClasseId" class="control-label"></label>
+                <select asp-for="ClasseId" class="form-control" asp-items="ViewBag.ClasseId"></select>
+                <span asp-validation-for="ClasseId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="AddedDate" class="control-label"></label>
+                <input asp-for="AddedDate" class="form-control" />
+                <span asp-validation-for="AddedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@* @using GestAgape.Core.Entities.Admission
+@model GestAgape.Core.Entities.Admission.Paiement
+
+@{
+    ViewData["Title"] = "Enregistrement du paiement";
+    ViewData["Module"] = "Admission";
+
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <form class="col-12 col-md-12 col-lg-12" asp-controller="Admission" asp-action="CreatePaiement">
+
+            <div id="response_message_case"></div> *@
+
+@*             <img style="display:block; margin: 0px auto;" id="loader" src="~/img/loader.gif">
+ *@
+    @*         <div class="col-md-12 col-sm-12 col-lg-12 mb-2">
+
+                <div class="form-group row mb-2">
+                    <div class="col-md-6">
+
+                        <label asp-for="DemandeAdmission.Candidat.Personne.Nom">Nom(s)</label>
+                        <input asp-for="DemandeAdmission.Candidat.Personne.Nom" type="text" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DemandeAdmission.Candidat.Personne.Prenom">Prénom(s)</label>
+                        <input asp-for="DemandeAdmission.Candidat.Personne.Prenom" type="text" class="form-control" readonly>
+                    </div>
+                    
+                    @if (Model.DemandeAdmission.TypeAdmission == TypeAdmission.Concours)
+                    {
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="DemandeAdmission.Classe.Cycle.FraisConcours">Frais de concours</label>
+                            <input asp-for="DemandeAdmission.Classe.Cycle.FraisConcours" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="DemandeAdmission.Classe.Cycle.Code">Cycle</label>
+                            <input asp-for="DemandeAdmission.Classe.Cycle.Code" type="text" class="form-control" readonly>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="DemandeAdmission.Classe.FraisEtudeDossier">Frais d'étude de dossier</label>
+                            <input asp-for="DemandeAdmission.Classe.FraisEtudeDossier" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <label asp-for="DemandeAdmission.Classe.Code">Classe</label>
+                            <input asp-for="DemandeAdmission.Classe.Code" type="text" class="form-control" readonly>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-lg-12 mb-2">
+
+                <div class="form-group row">
+
+                    <div class="col-md-6 ">
+                        <label asp-for="Montant" class=" fw-bold " for="#"> Montant</label>
+                        <input asp-for="Montant" max="10000" class="form-control" placeholder="Saisissez le montant du versement">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DemandeAdmission.TypeAdmission" class=" fw-bold ">Motif du versement </label>
+                        <input asp-for="DemandeAdmission.TypeAdmission" type="text" class="form-control" readonly>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <button type="reset" class="btnperso" style="background-color: #e81d27; border:#e81d27; float: left;">Annuler</button>
+            <button type="submit" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right ">Valider</button>
+            <input type="hidden" asp-for="DemandeAdmissionId" />
+
+        </form>
+    </div>
+</div>
+ *@

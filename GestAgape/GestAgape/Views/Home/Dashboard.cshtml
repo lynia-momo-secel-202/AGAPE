@@ -1,0 +1,146 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["Module"] = "Acceuil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int totInsc = ViewBag.TotalInscritsParJour;
+    int totDA = ViewBag.TotalDA;
+    int totPaie = ViewBag.NbrePaiements;
+    int nbreJours = ViewBag.NextConcours;
+    int nbreAdmis = ViewBag.NombreAdmis;
+    var date = DateTime.Now.ToString("dd/MM/yyyy");
+    Concours? dernierConcours = ViewBag.LastConcours;
+    int[] inscrits = ViewBag.TabInscrits;
+    string[] annees = ViewBag.DixAA;
+}
+<div class="row">
+
+    <div class="col-md-6">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Evolution des inscriptions <small>par année</small></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <canvas id="EtudbarChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="row" style="display: inline-block;">
+            <div class="col-md-6">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 ">
+                    <div class="tile-stats" style="background-color: #e81d27; border-radius:25px; width: 230px; height: 160px;">
+                        <div class="icon"><i class="fa fa-book"></i></div>
+                        <div class="count" style="color:white">@totDA</div>
+                        <h4 style="color:white"> &nbsp; Nouvelles candidatures</h4>
+                        <div style="background-color: white; border-radius:10px; width: 60px; height: 25px;" class="ml-4 mt-4">
+                            <a asp-action="DemandeAdmission" asp-controller="Admission">&nbsp;&nbsp;&nbsp;Voir?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 ">
+                    <div class="tile-stats" style="background-color: #22a9e1;border-radius:20px; width: 230px; height: 160px;">
+                        <div class="icon"><i class="fa fa-money"></i></div>
+                        <div class="count" style="color:white">@totPaie</div>
+                        <h4 style="color:white">&nbsp; Versements enregistrés</h4>
+                        <div style="background-color: white; border-radius:10px; width: 100px; height: 25px;" class="ml-4 mt-4">
+                            <h6>&nbsp;&nbsp;<a asp-controller="Admission" asp-action="Paiement"> @date </a></h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="display: inline-block;">
+            <div class="col-md-6">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 ">
+                    <div class="tile-stats " style="background-color: #22a9e1;border-radius:15px; border-radius:25px; width: 230px; height: 160px;">
+                        <div class="icon"><i class="fa fa-user"></i></div>
+                        <div class="count" style="color:white">@totInsc</div>
+                        <h4 style="color:white"> &nbsp;inscrits aujourd'hui</h4>
+                        <div style="background-color: white; border-radius:10px; width: 80px; height: 25px;" class="ml-4 mt-4">
+                            <a asp-action="DemandeAdmission" asp-controller="Admission">&nbsp;&nbsp;&nbsp;Inscrire?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 ">
+                    <div class="tile-stats" style="background-color: #e81d27;border-radius:25px;width: 230px; height: 160px;">
+                        <div class="icon" style="width: 16px;"><i class="fa fa-edit"></i></div>
+                        @if (dernierConcours != null)
+                        {
+                            var dateDernierConcours = DateTime.Parse(dernierConcours.Date);
+                            @if (dateDernierConcours < DateTime.Now)
+                            {
+                                <div class="count" style="color:white">@nbreAdmis</div>
+                                <h4 style="color:white"> &nbsp; Admis au dernier concours</h4>
+                                <div style="background-color: white; border-radius:10px; width: 90px; height: 25px;" class="ml-4 mt-4">
+                                    <a asp-action="DemandeAdmission" asp-controller="Admission" asp-route-id="@dernierConcours.Id">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voir</a>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="count" style="color:white">JJ-@nbreJours</div>
+                                <h4 style="color:white"> &nbsp; Pour le prochain concours</h4>
+                                <div style="background-color: white; border-radius:10px; width: 90px; height: 25px;" class="ml-4 mt-4">
+                                    <a asp-action="DetailsConcours" asp-controller="Admission" asp-route-id="@dernierConcours.Id">&nbsp;&nbsp;&nbsp;Candidats</a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="count" style="color:white">0</div>
+                            <h4 style="color:white"> &nbsp; concours programmé</h4>
+                            <div style="background-color: white; border-radius:10px; width: 90px; height: 25px;" class="ml-4 mt-4">
+                                <a asp-action="CreateConcours" asp-controller="Admission" >&nbsp;&nbsp;&nbsp;Nouveau</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts {
+
+            // Bar chart
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        if ($('#EtudbarChart').length) {
+
+            var ctx = document.getElementById("EtudbarChart").getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels: ["@annees[9]", "@annees[8]", "@annees[7]", "@annees[6]", "@annees[5]", "@annees[4]", "@annees[3]", "@annees[2]", "@annees[1]", "@annees[0]"], datasets: [{
+                        label: '# étudiants',
+                        backgroundColor: "pink",
+                    data: [@inscrits[9], @inscrits[8], @inscrits[7], @inscrits[6], @inscrits[5], @inscrits[4], @inscrits[3], @inscrits[2], @inscrits[1], @inscrits[0]]
+                }]
+                },
+
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        }
+
+    </script>
+    }

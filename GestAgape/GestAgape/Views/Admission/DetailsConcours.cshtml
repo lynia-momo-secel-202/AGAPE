@@ -1,0 +1,129 @@
+﻿@using GestAgape.Core.Entities.Admission
+@model GestAgape.Core.Entities.Admission.Concours
+
+@{
+    ViewData["Title"] = "Vue d'ensemble du " + Model.Libelle;
+    ViewData["Module"] = "Admission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<Candidat> candidats = new List<Candidat>();
+    List<DemandeAdmission> demandes = new List<DemandeAdmission>();
+    bool trouve = false;
+    foreach (DemandeAdmission DA in ViewBag.DAList)
+    {
+        if (DA.ConcoursId == Model.Id && DA.TypeAdmission == TypeAdmission.Concours)
+        {
+            candidats.Add(DA.Candidat);
+            demandes.Add(DA);
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-md-12 col-sm-12 ">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="col-md-7 col-sm-7 ">
+                    <div class="product-image">
+                        @if (Model.Flyers != null)
+                        {
+                                <object data=@Url.Content($"~/Data/LogoImageFolder/{Model.Flyers}") alt=@Model.Libelle title=@Model.Libelle class="img-responsive avatar-view" width="420px" height="420px"> </object>
+                        }
+                        else
+                        {
+                                <img src="~/img/avatars/concours.png" alt="Flyer du concours" title="Flyer du concours" class="img-responsive avatar-view" />
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-5 col-sm-5 " style="border:0px solid #e5e5e5;font-size:large">
+
+                    <h3 class="prod_title" style="font-weight:bold;font-size:xx-large"> @Model.Libelle </h3>
+                    <p>@Model.Description </p>
+                    <br />
+                    <div class="form-group row col-12">
+                        <label asp-for="Date" class="control-label"> Date du concours</label>
+                        <input asp-for="Date" class="form-control" readonly />
+                    </div>
+
+                    <div class="form-group row col-12">
+                        <div class="form-group col-6">
+                            <label asp-for="HeureDebut" class="control-label">Heure de Debut</label>
+                            <input asp-for="HeureDebut" class="form-control" readonly />
+                        </div>
+
+                        <div class="form-group col-6">
+                            <label asp-for="HeureFin" class="control-label">Heure de Fin</label>
+                            <input asp-for="HeureFin" class="form-control" readonly />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <a asp-action="Concours" data-placement="top" data-toggle="tooltip" data-original-title="Liste des Concours" style="float: left;">
+
+                            <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 width="40px" height="40px" viewBox="0 0 46.032 46.033"
+                                 xml:space="preserve">
+                            <g>
+                            <g>
+                            <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#e81d27" />
+                            <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#e81d27" />
+                            </g>
+                            </g>
+                        </svg>
+                        </a>
+                        <a asp-action="UpdateConcours" asp-route-Id="@Model.Id" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-edit m-right-xs"></i>Modifier le Concours</a>
+                    </div>
+
+                </div>
+            </div>
+            <br />
+            <div class="col-md-12">
+                <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Liste des Candidats à ce concours</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Liste des demandes d'admission à ce councours</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Resultats du councours</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <partial name="_PartialCandidat" model="@candidats" />
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <partial name="_PartialDemandeAdmission" model="@demandes" />
+                    </div>
+
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="text-center mtop20">
+                            @if (Model.Resultats == "")
+                            {
+                                <strong>Verifier le format de votre fichier ... Les resultats doivent etre un fichier pdf , doc ou docx </strong>
+                            }
+                            else if (Model.Resultats != null)
+                            {
+                                <object data=@Url.Content($"~/Data/LogoImageFolder/{Model.Resultats}") width="100%" height="400px"></object>
+                            }else
+                            {
+                                    <img src="~/img/avatars/resultat.jpg" alt="Flyer du concours" title="Flyer du concours" class="img-responsive avatar-view" width="538px" height="380px" />
+                            }
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+</div>
+<br />
+<br />

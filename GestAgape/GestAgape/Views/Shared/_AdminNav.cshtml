@@ -1,0 +1,134 @@
+﻿@inject GestAgape.Service.Admissions.IAdmission admission
+<div class="col-md-3 left_col" style="font-weight:bold;">
+    <div class="menu_fixed scroll-view">
+        <div class="clearfix"></div>
+        <br />
+        <!-- menu profile quick info -->
+        <div class="profile clearfix">
+            <div class="profile_pic">
+                <img src="~/img/icons/Agape.png" class="mb-3" style="width: 120px; margin-left:65%;" alt="logo">
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div class="col-12" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc;text-align:center; ">
+                <label class="control-label sidebar-link"> Année en cours </label>
+                <select class="form-control sidebar-link">
+                    @foreach (var annee in admission.GetAllAnneeAcademique)
+                    {
+                        <option value="@annee.Id">@annee.AnneeDebut - @annee.AnneeFin</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <!-- /menu profile quick info -->
+
+        <br />
+
+        <!-- sidebar menu -->
+        <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+                <ul class="nav side-menu">
+                    <li><a asp-action="Dashboard" asp-controller="Home"><i class="fa fa-home"></i> DASHBOARD</a></li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-file-text"></i> ADMISSION <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a asp-action="Concours" asp-controller="Admission">Gestion des concours</a></li>
+                            <li><a asp-action="Candidat" asp-controller="Admission">Gestion des candidats</a></li>
+                            <li><a asp-action="DemandeAdmission" asp-controller="Admission">Traitement des demandes d'admission</a></li>
+                            <li><a asp-action="DossierPersonnel" asp-controller="Admission">Traitement des dossiers personnels</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-book"></i> SCOLARITE <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a asp-action="DemandeAdmission" asp-controller="Admission">Inscription d'un étudiant</a></li>
+                            @*
+                            <li><a asp-action="Etudiant" asp-controller="Scolarite">Paiement des frais médicaux</a></li>
+                            <li><a asp-action="Etudiant" asp-controller="Scolarite">Paiement des frais de soutenance</a></li> *@
+                            <li><a asp-action="Etudiant" asp-controller="Scolarite">Gestion des étudiants</a></li>
+                            <li><a asp-action="EtatScolarite" asp-controller="Scolarite">Etat de scolarité</a></li>
+                            <li><a asp-action="Etudiant" asp-controller="Scolarite">Paiement des frais de scolarité</a></li>
+                            @*<li><a asp-action="Etudiant" asp-controller="Scolarite">Paiement des frais d'examen</a></li>
+                            *@
+                            <li><a asp-action="Bourse" asp-controller="Scolarite">Gestion des bourses</a></li>
+                            <li><a asp-action="ChangementFiliere" asp-controller="Scolarite">Changements de spécialités</a></li>
+                            <li><a asp-action="ChangementCampus" asp-controller="Scolarite">Changements de campus</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-money"></i> FINANCES <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a asp-action="Paiement" asp-controller="Admission">Historique des paiements</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-cogs"></i> PARAMETRAGES <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li class="nav side-menu">
+                                <a><i class="fa fa-users"></i> Utilisateurs <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a asp-action="AffectList" asp-controller="IdentityManagement">Liste des utilisateurs</a></li>
+                                    <li><a asp-action="Register" asp-controller="IdentityManagement">Création des utilisateurs</a></li>
+                                    <li><a asp-action="Affectation" asp-controller="IdentityManagement">Affectation d'un utilisateur à un campus</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav side-menu">
+                                <a><i class="fa fa-book"></i> Académiques <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a asp-action="Filiere" asp-controller="Parametrage">Gestion des Séries</a></li>
+                                    <li><a asp-action="Niveau" asp-controller="Parametrage">Gestion des niveaux</a></li>
+                                    <li><a asp-action="Cycle" asp-controller="Parametrage">Gestion des cycles</a></li>
+                                    <li><a asp-action="Classe" asp-controller="Parametrage">Gestion des classes</a></li>
+                                    <li><a asp-action="Departement" asp-controller="Parametrage">Gestion des départements</a></li>
+                                    <li><a asp-action="ChefDepartement" asp-controller="Parametrage">Gestion des chefs de départements</a></li>
+                                    <li><a asp-action="Campus" asp-controller="Parametrage">Gestion des campus</a></li>
+                                    <li><a asp-action="Ipes" asp-controller="Parametrage">Gestion des Ipes</a></li>
+                                    <li><a asp-action="AnneeAcademique" asp-controller="Admission">Gestion des années académiques</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav side-menu">
+                                <a><i class="fa fa-money"></i> Frais <span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a asp-action="FraisInscription" asp-controller="Scolarite">Gestion des frais d'inscription</a></li>
+                                    <li><a asp-action="TrancheScolarite" asp-controller="Scolarite">Gestion des frais frais de scolarité</a></li>
+                                    <li><a asp-action="FraisMedicaux" asp-controller="Scolarite">Gestion des frais médicaux</a></li>
+                                    <li><a asp-action="FraisSoutenance" asp-controller="Scolarite">Gestion des frais de soutenance</a></li>
+                                    <li><a asp-action="FraisDossierExamen" asp-controller="Scolarite">Gestion des frais d'examen</a></li>
+                                    <li><a asp-action="FraisConcours" asp-controller="Admission">Gestion des frais de concours</a></li>
+                                    <li><a asp-action="FraisEtudeDossier" asp-controller="Admission">Gestion des frais d'étude de dossier</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <!-- /sidebar menu -->
+        <!-- menu footer buttons -->
+        <div class="sidebar-footer hidden-small">
+            <a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true" style="color:#F6F6F8;"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true" style="color:#F6F6F8;"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" style="color:#F6F6F8; font-weight:100;"></span>
+            </a>
+            <a data-toggle="tooltip" data-placement="top" title="Logout" asp-controller="IdentityManagement" asp-action="LogOut">
+                <span class="glyphicon glyphicon-off" aria-hidden="true" style="color:#F6F6F8;"></span>
+            </a>
+        </div>
+        <!-- /menu footer buttons -->
+    </div>
+</div>

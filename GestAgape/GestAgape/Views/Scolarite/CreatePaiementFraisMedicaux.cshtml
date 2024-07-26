@@ -1,0 +1,194 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@using GestAgape.Core.Entities.Scolarite
+@using GestAgape.Core.Entities.Parametrage
+@using GestAgape.Infrastructure.Utilities;
+@model GestAgape.Core.Entities.Admission.Paiement
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Paiement des frais médicaux";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Module"] = "Scolarité";
+    string campus = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusId);
+    string campusname = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusName);
+
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <form class="col-12 col-md-12 col-lg-12" asp-controller="Scolarite" asp-action="CreatePfraisMedicaux">
+
+            <div id="response_message_case"></div>
+
+            <div class="col-md-12 col-sm-12 col-lg-12 mb-2">
+
+                <div class="form-group row mb-2">
+                    <div class="col-md-4">
+                        <label>Matricule</label>
+                        <input value="@Model.DemandeAdmission.Inscription.Matricule.LibelleMatricule" type="text" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="DemandeAdmission.Candidat.Personne.Nom">Nom(s)</label>
+                        <input asp-for="DemandeAdmission.Candidat.Personne.Nom" type="text" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="DemandeAdmission.Candidat.Personne.Prenom">Prénom(s)</label>
+                        <input asp-for="DemandeAdmission.Candidat.Personne.Prenom" type="text" class="form-control" readonly>
+                    </div>
+
+
+                    @foreach (FraisMedicaux fraisMedicaux in ViewBag.frais)
+                    {
+                        @if (campus == fraisMedicaux.CampusId.ToString())
+                        {
+                            <div class="col-md-6 mt-4">
+                                <label asp-for="@fraisMedicaux.Montant">Frais Medicaux</label>
+                                <input asp-for="@fraisMedicaux.Montant" type="text" class="form-control" readonly>
+                            </div>
+                        }
+                    }
+                    <div class="col-md-6 mt-4">
+                        <label asp-for="@campusname">Campus</label>
+                        <input asp-for="@campusname" type="text" class="form-control" readonly>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-lg-12 mb-2">
+
+                <div class="form-group row">
+
+                    <div class="col-md-6 ">
+                        <label asp-for="Montant" class=" fw-bold " for="#"> Montant</label>
+                        <input asp-for="Montant" max="10000" class="form-control" placeholder="Saisissez le montant du versement">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="">Mode de versement </label>
+
+                        <select asp-for="Modepaiement" class="form-control ">
+                            <option value=@Modepaiement.Espece>Par espèce</option>
+                            <option value=@Modepaiement.OrangeMoney> Par orange money</option>
+                            <option value=@Modepaiement.MobileMoney>Par mobile money</option>
+                            <option value=@Modepaiement.VersementBancaire>par banque</option>
+                            <option value=@Modepaiement.Cheque>par chèque</option>
+                            <option value=@Modepaiement.Autres>autres</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class=" fw-bold ">Motif du versement </label>
+                        <input value="Frais Medicaux" type="text" class="form-control" readonly>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <button type="reset" class="btnperso" style="background-color: #e81d27; border:#e81d27; float: left;">Annuler</button>
+            <button type="submit" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right ">Valider</button>
+            <input type="hidden" asp-for="DemandeAdmission.Inscription.Id" />
+            <input type="hidden" asp-for="DemandeAdmissionId" />
+
+        </form>
+    </div>
+</div>
+<a asp-controller="Admission" asp-action="Paiement" style="margin-top:14px;">
+
+    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         width="40px" height="40px" viewBox="0 0 46.032 46.033"
+         xml:space="preserve">
+    <g>
+    <g>
+    <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#22a9e1" />
+    <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#22a9e1" />
+                            </g>
+                            </g>
+                        </svg>
+
+</a>
+
+
+
+
+<script>
+    const formElem = document.querySelector("form");
+    $("#loader").hide();
+    $('form').submit(function (e) {
+        $("#loader").show();
+        let errorMessages = "";
+        e.preventDefault();
+        //Swal.fire('Any fool can use a computer')
+        var data = $('form').serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+        console.log(data);
+        axios({
+            url: "@Url.Action("CreatePaiementfraisMedicaux", "Scolarite")",
+            method: 'POST',
+            data: data,
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        })
+            .then(response => {
+                if (response.data.isValid == true) {
+                    Swal.fire(
+                        'Réussi',
+                        response.data.message,
+                        'success'
+                    );
+                    console.log("Data", response.data);
+                    window.location.assign("https://localhost:44349/Scolarite/PrintRecuPaiementFraisMedicaux/" + response.data.data);
+                } else {
+                    Swal.fire(
+                        'Echec',
+                        response.data.message,
+                        'warning'
+                    );
+                    $("#response_message_case").html('<div class="alert alert-warning" role="alert" id="response_message_case">' + response.data.message + '</div>');
+                }
+                $("#loader").hide();
+                console.log("OK", response);
+            })
+            .catch(error => {
+                for (let err of error.response.data.validationMessages) {
+                    errorMessages += err + "</br>";
+                }
+                Swal.fire(
+                    'Echec',
+                    error.response.message,
+                    'error'
+                );
+                $("#response_message_case").html('<div class="alert alert-danger" role="alert" id="response_message_case">' + errorMessages + '</div>');
+                $("#loader").hide();
+                //  console.log(error.response.data.validationMessages);
+            });
+        return false;
+
+    });
+</script>
+<style>
+
+    #response_message_case {
+        font-size: 12px;
+    }
+</style>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

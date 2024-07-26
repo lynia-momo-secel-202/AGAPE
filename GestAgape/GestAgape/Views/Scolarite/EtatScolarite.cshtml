@@ -1,0 +1,198 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@using GestAgape.Core.Entities.Parametrage;
+@using GestAgape.Core.Entities.Scolarite;
+@using GestAgape.Infrastructure.Utilities;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model IEnumerable<GestAgape.Core.Entities.Scolarite.Inscription>
+
+@{
+    string campus = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusName);
+    string responcec ="", responcen="", responcesp="";
+    Cycle c = ViewBag.choixcycle;
+    Niveau n = ViewBag.choixniveau;
+    Filiere sp = ViewBag.choixspecialite;
+    if(c != null)
+    {
+
+        responcec = " , du cycle " + c.Libelle;
+    }
+    if (n != null)
+    {
+        responcen = " , du niveau " + n.Libelle;
+    }
+    if (sp != null)
+    {
+        responcesp = " , de la filiere " + sp.Libelle;
+    }
+    ViewData["Title"] = "Etat de solvabilité des étudiants du campus " + campus +responcec + responcesp + responcen;
+
+    ViewData["Module"] = "Scolarité";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    double? reste;
+    string campusId = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusId);
+
+    //cycle list
+    List<Cycle> cycles;
+    cycles = ViewBag.Cycle;
+    var cycleitem = cycles.Select(item => new SelectListItem() { Text = item.Code, Value = item.Id.ToString() }).ToList();
+
+    //specialite list
+    List<Filiere> specialites;
+    specialites = ViewBag.Filiere;
+    var specialiteitem = specialites.Select(item => new SelectListItem() { Text = item.Libelle, Value = item.Id.ToString() }).ToList();
+
+    //niveau list
+    List<Niveau> niveau;
+    niveau = ViewBag.Niveau;
+    var niveauitem = niveau.Select(item => new SelectListItem() { Text = item.Libelle, Value = item.Id.ToString() }).ToList();
+
+    //fonction permettant de calculer le montant de la scolarite pour une classe sonnee
+    double? Scolarite(Inscription inscription, string campus)
+    {
+        double? ms = 0;
+        foreach (TrancheScolarite tranche in ViewBag.FraisScolarite)
+        {
+
+            if (tranche.ClasseId == inscription.DemandeAdmission.ClasseId && tranche.AnneeAcademiqueId == inscription.DemandeAdmission.AnneeAcademiqueId && tranche.CampusId.ToString() == campus)
+            {
+                ms += tranche.Montant;
+            }
+        }
+        return ms;
+    }
+
+    // fonction permettant de calculer le montant de la scolarite payer par un etudiant
+
+    double? ScolaritePayer(Guid inscription)
+    {
+        double? somme = 0;
+        foreach (Paiement paiement in ViewBag.Paiement)
+        {
+
+            if (paiement.DemandeAdmission.InscriptionId == inscription && paiement.Motif == Motif.FraisScolarite)
+            {
+                somme += paiement.Montant;
+            }
+        }
+
+        return somme;
+    }
+
+    // fonction permettant de calculer le montant de la bourse accorde a un etudiant
+
+    double? Bourse(Guid inscription)
+    {
+        double? mb = 0;
+        foreach (Bourse b in ViewBag.Bourse)
+            {
+                if (b.InscriptionId == inscription && b.Statut == Statut.accepte)
+                {
+                    mb = mb + b.Montant;
+                }
+            }
+
+        return mb;
+    }
+}
+
+@* differents filtres *@
+<form action="EtatScolarite">
+    <div class="row fw-bold mb-4 ml-2" style="color: #22a9e1;">
+        <div class="col-sm">
+            <div class="row ">
+                Cycle
+            </div>
+            <div class="row ">
+                <select name="cycle" value="CycleId" class="p-1 w-100 rounded-2 form-control " asp-items="cycleitem" id="cycle">
+                    <option value="null">Null</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row ">
+                Filière
+            </div>
+            <div class="row ">
+                <select name="specialite" value="FiliereId" class="p-1 w-100 rounded-2 form-control  " asp-items="specialiteitem" id="specialite">
+                    <option value="null">Null</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm">
+            <div class="row ">
+                Niveau
+            </div>
+            <div class="row ">
+                <select value="NiveauId" name="niveau" class="p-1 w-100 rounded-2 form-control  " asp-items="niveauitem" id="niveau">
+                    <option value="null">Null</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm mt-1">
+            <input type="submit" value="Filtrer" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right " />
+        </div>
+        <div class="col-sm mt-1">
+            <button class="btnperso" style="background-color: #22a9e1; border: #22a9e1 " onclick="reload()">Voir tout </button>
+        </div>
+    </div>
+
+</form>
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box table-responsive">
+                <table id="datatable-buttons" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th>Matricule</th>
+                            <th>Nom (s) & Prénom (s)</th>
+                            <th>Filière</th>
+                            <th>Niveau</th>
+                            <th>Montant de scolarité </th>
+                            <th>Bourse </th>
+                            <th> Reste à payer </th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var item in Model)
+                        {
+                            if (item.CampusId.ToString() == campusId)
+                            {
+                                <tr>
+                                    <td> @i </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Matricule.LibelleMatricule) </td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Nom) @Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Prenom)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Filiere.Libelle)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Niveau.Libelle)</td>
+                                    <td>@Scolarite(item,@campusId) FCFA</td>
+                                    <td>@Bourse(item.Id) FCFA</td>
+                                    @{
+                                        reste = Scolarite(item, @campusId) - ScolaritePayer(item.Id) - @Bourse(item.Id);
+                                    }
+                                    <td>@reste FCFA</td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+@* script de filtres *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#niveau').select2();
+        $('#cycle').select2();
+        $('#specialite').select2();
+    });
+
+    function reload() {
+        location.reload();
+    }
+</script>

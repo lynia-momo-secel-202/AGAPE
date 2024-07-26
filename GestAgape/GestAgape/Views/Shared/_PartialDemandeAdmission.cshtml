@@ -1,0 +1,129 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@model IEnumerable<GestAgape.Core.Entities.Admission.DemandeAdmission>
+@{
+    Layout = null;
+    int i = 1;
+}
+
+<div class="card-box table-responsive">
+    <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr style="color: #22a9e1;">
+                <th>#</th>
+                <th>Code</th>
+                <th>Candidat</th>
+                <th>Type d'admission</th>
+                <th>@Html.DisplayNameFor(model => model.Classe)</th>
+                <th>Décision</th>
+                <th>
+                    Etat du dossier personnel
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td scope="row">
+                        @i
+                    </td>
+                    <td scope="row">
+                        @Html.DisplayFor(modelItem => item.Candidat.Code)
+                    </td>
+                        @if (item.Decision == Decision.Admis)
+                        {
+                        <td>
+                            <a asp-controller="Scolarite" asp-action="CreateInscription" data-placement="top" data-toggle="tooltip" data-original-title="Inscrire ?" asp-route-id="@item.Id">
+                                    @Html.DisplayFor(modelItem => item.Candidat.Personne.Nom)  @Html.DisplayFor(modelItem => item.Candidat.Personne.Prenom)
+                            </a>
+                        </td>
+
+                        }
+                        else
+                        {
+                        <td>
+                                @Html.DisplayFor(modelItem => item.Candidat.Personne.Nom)  @Html.DisplayFor(modelItem => item.Candidat.Personne.Prenom)
+                        </td>
+                        }
+                    <td>
+                        @if (item.TypeAdmission == TypeAdmission.EtudeDossier)
+                        {
+                            <span>Etude de dossier</span>
+                        }
+                        else
+                        {
+                            <span>Concours</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Classe.Code) : @Html.DisplayFor(modelItem => item.Classe.Libelle)
+                    </td>
+                    <td>
+                        @if (item.Decision == Decision.Admis)
+                        {
+                            <a asp-action="UpdateStatutAdmission" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip"
+                               data-original-title="Modifier le statut" asp-route-id="@item.Id"><strong style="color:rgb(0,94,0);">Admis</strong></a>
+                        }
+                        else if (item.Decision == Decision.Refuse)
+                        {
+                            <a asp-action="UpdateStatutAdmission" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip"
+                               data-original-title="Modifier le statut" asp-route-id="@item.Id"><strong style="color:#e81d27;">Refusé</strong> </a>
+                        }
+                        else
+                        {
+                            <a asp-action="UpdateStatutAdmission" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip"
+                               data-original-title="Modifier le statut" asp-route-id="@item.Id"><strong style="color:#F99910;">En cours</strong> </a>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Candidat.DossierPersonnel != null)
+                        {
+
+
+                            @if ((item.Candidat.DossierPersonnel.ActeNaissance != null && item.Candidat.DossierPersonnel.CNI != null && item.Candidat.DossierPersonnel.Photos != null)
+                           &&
+                           ((item.Candidat.DossierPersonnel.ReleveBac != null && item.Classe.Niveau.Libelle == "1") ||
+                           (item.Candidat.DossierPersonnel.ReleveBac != null && item.Candidat.DossierPersonnel.ReleveNiveau1 != null && item.Classe.Niveau.Libelle == "2") ||
+                           (item.Candidat.DossierPersonnel.ReleveBac != null && item.Candidat.DossierPersonnel.ReleveNiveau1 != null && item.Candidat.DossierPersonnel.ReleveNiveau2 != null && item.Candidat.DossierPersonnel.ReleveBTS != null && item.Classe.Niveau.Libelle == "3") ||
+                           (item.Candidat.DossierPersonnel.ReleveBac != null && item.Candidat.DossierPersonnel.ReleveNiveau1 != null && item.Candidat.DossierPersonnel.ReleveNiveau2 != null && item.Candidat.DossierPersonnel.ReleveBTS != null && item.Candidat.DossierPersonnel.ReleveLicence != null && item.Classe.Niveau.Libelle == "4") ||
+                           (item.Candidat.DossierPersonnel.ReleveBac != null && item.Candidat.DossierPersonnel.ReleveNiveau1 != null && item.Candidat.DossierPersonnel.ReleveNiveau2 != null && item.Candidat.DossierPersonnel.ReleveBTS != null && item.Candidat.DossierPersonnel.ReleveLicence != null && item.Candidat.DossierPersonnel.ReleveMaster1 != null && item.Classe.Niveau.Libelle == "5")
+                           )
+                           )
+                            {
+                                <a asp-action="DetailsDossierPersonnel" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Voir les fichiers" asp-route-id="@item.Candidat.DossierPersonnelId"><strong style="color:rgb(0,94,0);">Complet</strong></a>
+                            }
+                            else
+                            {
+                                <a asp-action="DetailsDossierPersonnel" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Voir les fichiers" asp-route-id="@item.Candidat.DossierPersonnelId"><strong style="color:#e81d27;">Incomplet</strong> </a>
+                            }
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="ce candidat aurais t-il ete mal enregistrer ?"><strong style="color:#e81d27;"><i class="fa fa-warning" class="mr-2"></i>Abscence de dossier</strong> </a>
+                        }
+                    </td>
+                    <td>
+                        @*   <a asp-action="DetailsDemandeAdmission" class="btn btn-sm btn-default" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Afficher les details" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px">
+                    <i class="fa fa-eye"></i>
+                    </a> *@
+                        <a asp-action="UpdateDemandeAdmission" data-placement="top" data-toggle="tooltip" data-original-title="Modifier la demande" asp-route-id="@item.Id" style="color:rgb(189,165,28); font-size:20px;">
+                            <i class="fa fa-edit"></i>
+                        </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a asp-action="CreatePaiement"  data-placement="top" data-toggle="tooltip" data-original-title="Ajouter un paiement pour cette demande" asp-route-id="@item.Id" style="font-size:20px;color:#F99910;">
+                            <i class="fa fa-money"></i>
+                        </a>
+                           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <a asp-action="CreateInscription" asp-controller="Scolarite" data-placement="top" data-toggle="tooltip" data-original-title="Inscrire ce candidat" asp-route-id="@item.Id" style="font-size:20px;color:rgb(0,130,185);">
+                            <i class="fa fa-user-plus"></i>
+                        </a>
+                        @*<a asp-action="DeleteDemandeAdmission" asp-route-id="@item.Id">Delete</a> |*@
+                    </td>
+
+                </tr>
+
+                i++;
+            }
+        </tbody>
+    </table>
+</div>

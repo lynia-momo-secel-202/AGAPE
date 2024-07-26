@@ -1,0 +1,83 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@model IEnumerable<GestAgape.Core.Entities.Admission.Candidat>
+@{
+    Layout = null;
+    int i = 1;
+}
+
+<div class="card-box table-responsive">
+    <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr style="color: #22a9e1;">
+                <th>#</th>
+                <th>
+                    Code
+                </th>
+                <th>
+                    Nom(s) & Prénom(s)
+                </th>
+                <th>
+                    Contact
+                </th>
+                <th>
+                    Etablissement
+                </th>
+                <th>
+                    Lieu de résidence
+                </th>
+
+
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td scope="row"> @i </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Code)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Personne.Nom)  @Html.DisplayFor(modelItem => item.Personne.Prenom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Personne.Telephone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Etablissement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quartier)
+                    </td>
+
+                    <td>
+                        <div class="d-flex">
+                            <a asp-action="DetailsCandidat" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Voir le candidat"
+                               asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px">
+                                <i class="fa fa-eye"></i>
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a asp-action="UpdateCandidat" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Modifier ce candidat"
+                               asp-route-id="@item.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                <i class="fa fa-edit"></i>
+                            </a>&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a asp-action="UpdateDossierPersonnel" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Ajouter un élément du dossier"
+                               asp-route-id="@item.DossierPersonnelId" style="font-size:20px;color:rgb(255,135,28);">
+                                <i class="fa fa-file"></i>
+                            </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <a asp-action="CreateDemandeAdmission" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Enregistrer une demande d'admission"
+                               asp-route-id="@item.Id" style="color:rgb(0,50,200); font-size:20px;">
+                                <i class="fa fa-book"></i>
+                            </a>
+                        </div>
+                        @*
+                    class="btn btn-sm btn-default" type="button"  data-placement="top" data-toggle="tooltip" data-original-title="Forward"
+                    *@
+                    </td>
+                </tr>
+
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
