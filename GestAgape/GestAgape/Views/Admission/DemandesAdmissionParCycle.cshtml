@@ -1,0 +1,88 @@
+﻿@model IEnumerable<GestAgape.Core.Entities.Admission.DemandeAdmission>
+@using GestAgape.Core.Entities.Parametrage;
+
+
+@{
+    // Cycle cycle = ViewBag.ChoixDuCycle;
+    ViewData["Title"] = "DemandesAdmissionParCycle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Decision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mention)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeAdmission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Candidat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Concours)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnneeAcademique)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Classe)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Decision)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mention)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeAdmission)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Candidat.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Concours.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnneeAcademique.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Classe.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AddedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+
+</table>

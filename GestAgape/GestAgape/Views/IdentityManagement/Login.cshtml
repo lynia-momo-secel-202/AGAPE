@@ -1,0 +1,141 @@
+﻿@model GestAgape.Core.ViewModels.LoginVM
+
+@{
+    ViewData["Module"] = "Paramétrage";
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<link href="~/css/login.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body class="h-100 ">
+    <div class="container  h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-12">
+                <div class="row g-0">
+                    <div class="col-lg-6">
+                        <div class="card-body p-md-5 mx-md-4">
+                            <img src="~/img/icons/Agape.png" class="mb-5" style="width: 185px;" alt="logo">
+                            <label><h1>Entrez vos informations pour vous connecter à l'application de gestion du collège de l'AGAPE</h1></label>
+                            <div class="col-11" id="response_message_case"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 align-items-center " style="background-color: #eee;border-radius:30px;">
+                        <div class=" text-black m-5">
+                            <div class="m-5">
+                                <form asp-action="Login" id="form_login">
+                                    <div id="response_message_case"></div>
+                                    <div class="form-outline mb-4">
+                                        <label asp-for="Email" class="form-label">E-mail</label>
+                                        <fieldset class="email">
+                                            <input asp-for="Email" type="email" class="form-control "
+                                                   placeholder="Entrez votre adresse e-mail" />
+                                        </fieldset>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <label asp-for="Password" class="form-label">Mot de passe</label>
+                                        <fieldset class="password">
+                                            <input asp-for="Password" placeholder="Entrez votre mot de passe" type="password" class="form-control " />
+                                        </fieldset>
+                                        @* <p class="auth-link color-deep-blue-sea-light-20 float-right">
+                                            <a class="underline text-mutter text-danger" asp-action="ForgotPassword">mot de passe oublié?</a>
+                                        </p> *@
+                                    </div>
+                                    <div class="form-outline form-group row mb-2 hidden">
+                                        <div class="form-outline col-md-12 mb-4">
+                                            <label class="fw-bold" asp-for="CampusId">Campus</label>
+                                            <select class="form-control" asp-for="CampusId">
+                                                @foreach (var campus in ViewBag.Campus)
+                                                {
+                                                    <option value="@campus.Id">@campus.Nom</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btnperso btn2 btn2--large btn2--full-width margin-t-20 mb-3" style="background-color: #22a9e1; border: #22a9e1;float: right" tabindex="3">Se Connecter</button>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+@* <script src="~/js/site.js" asp-append-version="true"></script> *@
+<script src="/lib/fontawesome/js/all.min.js"></script>
+<script>
+    const formElem = document.querySelector("form");
+    $("#loader").hide();
+
+    $('form').submit(function (e) {
+        $("#loader").show();
+        let errorMessages = "";
+        e.preventDefault();
+        //Swal.fire('Any fool can use a computer')
+        var data = $('form').serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+
+        axios({
+            url: "@Url.Action("Login", "IdentityManagement")",
+            method: 'POST',
+            data: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => {
+                if (response.data.isValid == true) {
+                    Swal.fire(
+                        'Réussi',
+                        response.data.message,
+                        'success'
+                    );
+                    window.location.href = "@Url.Action("Dashboard", "Home")";
+
+                } else {
+                    Swal.fire(
+                        'Echec',
+                        response.data.message,
+                        'warning'
+                    );
+                    $("#response_message_case").html('<div class="alert alert-warning" role="alert" id="response_message_case">' + response.data.message + '</div>');
+                }
+                $("#loader").hide();
+                console.log("OK", response);
+            })
+            .catch(error => {
+                for (let err of error.response.data.validationMessages) {
+                    errorMessages += err + "</br>";
+                }
+                Swal.fire(
+                    'Echec',
+                    error.response.message,
+                    'error'
+                );
+                $("#response_message_case").html('<div class="alert alert-danger" role="alert" id="response_message_case">' + errorMessages + '</div>');
+                console.log("ERR", error);
+                //  console.log(error.response.data.validationMessages);
+                $("#loader").hide();
+            });
+        return false;
+
+    });
+</script>
+<style>
+
+    #response_message_case {
+        font-size: 12px;
+    }
+</style>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

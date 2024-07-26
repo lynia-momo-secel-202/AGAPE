@@ -1,0 +1,146 @@
+﻿@model GestAgape.Core.Entities.Parametrage.ChefDepartement
+@using GestAgape.Core.Entities.Parametrage
+
+@{
+    ViewData["Title"] = "Détails sur le chef du département " + Model.Departement.Libelle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Module"] = "Paramétrage";
+    List<ChefDepartement> chef = new List<ChefDepartement>();
+
+
+}
+<div class="row">
+    <div class="col-md-12 col-sm-12 ">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="col-md-4 mr-5 ml-5">
+                    <div>
+                        @if (Model.Personne.Photo != null)
+                        {
+                            <img src=@Url.Content($"~/Data/DossierFolder/{ Model.Personne.Photo}") alt="Avatar" title="Change the avatar" class="img-responsive avatar-view" width="150px" height="150px" />
+                        }
+                        else
+                        {
+                            <img src="~/img/avatars/avatar.png" alt="Avatar" title="Change the avatar" class="img-responsive avatar-view" width="150px" height="150px" />
+                        }
+                    </div>
+                    <br />
+                    <br />
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="Departement.Libelle" class="control-label"> Département</label>
+                            <input asp-for="Departement.Libelle" class="form-control" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="DateNomination" class="control-label">Date de nomination</label>
+                            <input asp-for="DateNomination" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="DateFin" class="control-label">Date de fin</label>
+                            @if (Model.Statut == true)
+                            {
+                                <input type="text" value="jusqu'à nos jours" class="form-control" readonly />
+                                @* <strong style="color:rgb(0,94,0); font-weight:800;"> jusqu'à nos jours</strong> *@
+                            }
+                            else
+                            {
+                                <input asp-for="DateNomination" class="form-control" readonly />
+                            }
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-5 col-sm-5 " style="border:0px solid #e5e5e5;font-size:large">
+
+                    <h3 class="prod_title" style="font-weight:bold;font-size:xx-large">
+                        @Model.Personne.Nom @Model.Personne.Prenom
+                        <span class="pull-right-2">
+                            @if (Model.Statut == true)
+                            {
+                                <strong style="color:rgb(0,94,0); font-weight:800;">Actif</strong>
+                            }
+                            else
+                            {
+                                <strong style="color:gray; font-weight:800;">Inactif</strong>
+
+                            }
+                        </span>
+                    </h3>
+                    <ul class="list-unstyled user_data">
+                        <li>
+                            <i class="fa fa-venus-mars"></i> Genre : @Model.Personne.Sexe
+                        </li>
+                        <li>
+                            <i class="fa fa-location-arrow"></i> Nationalite : @Model.Personne.Nationalite
+                        </li>
+                        <li>
+                            <i class="fa fa-language"></i> Langue : @Model.Personne.Langue
+                        </li>
+                        <li>
+                            <i class="fa fa-wheelchair"></i>Handicapé : @Model.Personne.Handicape
+                        </li>
+                        <li>
+                            <i class="fa fa-envelope"></i>Email : @Model.Personne.Email
+                        </li>
+                        <li>
+                            <i class="fa fa-phone"></i>Téléphone : @Model.Personne.Telephone
+                        </li>
+                    </ul>
+                    <br />
+                    <br />
+                    <div class="form-group col-md-12">
+                        <a asp-action="ChefDepartement" data-placement="top" data-toggle="tooltip" data-original-title="Liste des chefs de département" style="float: left;">
+
+                            <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                 width="40px" height="40px" viewBox="0 0 46.032 46.033"
+                                 xml:space="preserve">
+                            <g>
+                            <g>
+                            <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#22a9e1" />
+                            <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#22a9e1" />
+                            </g>
+                            </g>
+                        </svg>
+                        </a>
+                        <a asp-action="UpdateChefDepartement" asp-route-Id="@Model.Id" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right;"><i class="fa fa-edit m-right-xs"></i>Modifier le chef de département?</a>
+                    </div>
+
+                </div>
+                @foreach (ChefDepartement c in ViewBag.ChefDepartementList)
+                {
+                    if (c.Id == Model.Id)
+                    {
+                        chef.Add(c);
+                    }
+                }
+
+
+@* 
+                <div class="mt-100">
+                    <h4> Liste des départements gérés par @Model.Personne.Nom @Model.Personne.Prenom</h4>
+                </div>
+                <div role="tabpanel" class="tab-pane active " id="tab_content1" aria-labelledby="home-tab">
+
+                    <partial name="_PartialChefDepartement" model="@chef" />
+                </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+
+
+
+
+

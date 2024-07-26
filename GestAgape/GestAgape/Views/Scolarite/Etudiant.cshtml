@@ -1,0 +1,208 @@
+﻿@using GestAgape.Core.Entities.Parametrage;
+@using GestAgape.Infrastructure.Utilities;
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model IEnumerable<GestAgape.Core.Entities.Scolarite.Inscription>
+
+@{
+    string campusname = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusName);
+    string campusId = HttpContextAccessor.HttpContext.Session.GetString(SessionInfo.CurrentCampusId);
+    string responcec = "", responcen = "", responcesp = "", responcedate = "";
+    var dd = ViewBag.choixdatedebut;
+    var df = ViewBag.choixdatefin;
+    if(dd!=null)
+    {
+        dd = ViewBag.choixdatedebut.ToString("dd/MM/yyyy");
+    }
+    if(df != null)
+    {
+        df = ViewBag.choixdatefin.ToString("dd/MM/yyyy");
+    }
+
+    Cycle c = ViewBag.choixcycle;
+    Niveau n = ViewBag.choixniveau;
+    Filiere sp = ViewBag.choixspecialite;
+    if (c != null)
+    {
+
+        responcec = " , cycle " + c.Libelle;
+    }
+    if (n != null)
+    {
+        responcen = " , niveau " + n.Libelle;
+    }
+    if (sp != null)
+    {
+        responcesp = " , filiere " + sp.Libelle;
+    }
+    if (dd != null && df != null)
+    {
+        responcedate = " inscrits pendant la période du " + dd + " au " + df;
+    }
+    else
+    {
+        if (dd != null && df == null)
+        {
+            responcedate = " inscrits après le " + dd;
+        }
+        else if (dd == null && df != null)
+        {
+            responcedate = " inscrits avant le " + df;
+        }
+    }
+
+    ViewData["Title"] = "Liste des étudiants du campus " + campusname + responcec + responcesp + responcen + responcedate;
+    ViewData["Module"] = "Scolarité";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    //campus list
+    List<Campus> campus;
+    campus = ViewBag.Campus;
+    var campusitem = campus.Select(item => new SelectListItem() { Text = item.Nom, Value = item.Nom }).ToList();
+    //cycle list
+    List<Cycle> cycles;
+    cycles = ViewBag.Cycle;
+    var cycleitem = cycles.Select(item => new SelectListItem() { Text = item.Code, Value = item.Id.ToString() }).ToList();
+
+    //specialite list
+    List<Filiere> specialites;
+    specialites = ViewBag.Filiere;
+    var specialiteitem = specialites.Select(item => new SelectListItem() { Text = item.Libelle, Value = item.Id.ToString() }).ToList();
+
+    //niveau list
+    List<Niveau> niveau;
+    niveau = ViewBag.Niveau;
+    var niveauitem = niveau.Select(item => new SelectListItem() { Text = item.Libelle, Value = item.Id.ToString() }).ToList();
+
+}
+
+@*diffents filtres*@
+<form action="Etudiant">
+    <div class="row fw-bold mb-4 ml-2" style="color: #22a9e1;">
+        <div class="row col-6 mb-2 ml-5">
+            Trier les inscriptions pour une période
+        </div>
+        <div class="row ">
+            <div class="col-sm ">
+                Date de d&eacute;but
+                <input name="datedebut" type="date" id="start" class="p-1 rounded-2" />
+            </div>
+
+            <div class="col-sm">
+                Date de fin
+                <input name="datefin" type="date" id="end" class="p-1 rounded-2" />
+            </div>
+
+
+            <div class="col-sm">
+                <div class="row ">
+                    Cycle
+                </div>
+                <div class="row ">
+                    <select name="cycle" value="CycleId" class="p-1 w-100 rounded-2 form-control " asp-items="cycleitem" id="cycle">
+                        <option value="null">Null</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="row ">
+                    série
+                </div>
+                <div class="row ">
+                    <select name="specialite" value="FiliereId" class="p-1 w-100 rounded-2 form-control  " asp-items="specialiteitem" id="specialite">
+                        <option value="null">Null</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div class="row ">
+                    Niveau
+                </div>
+                <div class="row ">
+                    <select name="niveau" value="NiveauId" class="p-1 w-100 rounded-2 form-control  " asp-items="niveauitem" id="niveau">
+                        <option value="null">Null</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm mt-1">
+                <input class=" btnperso" type="submit" value="Filtrer" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right " />
+            </div>
+            <div class="col-sm mt-1">
+                <button class="btnperso" style="background-color: #22a9e1; border: #22a9e1 " onclick="reload()">Voir tout </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+</div>
+<br />
+@*tableau a imprimer*@
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <marquee style="color: rgb(0,94,0)"><em> Aller dans "Détails" pour effectuer un paiement ou toute autre opération sur un étudiant</em> </marquee>
+            <div class="card-box table-responsive">
+                <table id="datatable-buttons" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th>Matricule</th>
+                            <th>Nom (s) & Prénom (s)</th>
+                            <th>Cycle</th>
+                            <th>Filière</th>
+                            <th>Niveau</th>
+                            <th>Date d'Inscription</th>
+                            <th>Etablissement d'origine</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var item in Model)
+                        {
+                            if (item.CampusId.ToString() == campusId)
+                            {
+                                <tr>
+                                    <td> @i </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Matricule.LibelleMatricule) </td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Nom) @Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Prenom)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Cycle.Code)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Filiere.Libelle)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Niveau.Libelle)</td>
+                                    <td>@item.AddedDate.ToShortDateString()</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Etablissement)</td>
+                                    <td>
+                                        <a asp-action="DetailEtudiant" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Détails sur l'étudiant" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px;">
+                                            <i class="fa fa-eye"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a asp-action="UpdateEtudiant" type="button" data-placement="top" data-toggle="tooltip" data-original-title=" mettre à jour l'étudiant" asp-route-id="@item.DemandeAdmission.Candidat.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <a asp-action="CreatePaiementScolarite" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Payer les frais de scolarité" asp-route-id="@item.Id" style="color:#F99910;; font-size:20px;">
+                                            <i class="fa fa-money"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+
+</div>
+@*script de filtres*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#niveau').select2();
+        $('#cycle').select2();
+        $('#specialite').select2();
+    });
+
+    function reload() {
+        location.reload();
+    }
+</script>

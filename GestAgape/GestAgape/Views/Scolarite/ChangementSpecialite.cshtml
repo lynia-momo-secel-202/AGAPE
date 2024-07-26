@@ -1,0 +1,82 @@
+﻿@using GestAgape.Core.Entities.Parametrage
+@model IEnumerable<GestAgape.Core.Entities.Scolarite.ChangementFiliereOrCampus>
+
+@{
+    ViewData["Title"] = "Vue d'ensemble sur les changements de spécialité";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Module"] = "Scolarité";
+    int i = 1;
+    string? next = "";
+    string? past = "";
+}
+
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box table-responsive">
+                <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th>Matricule</th>
+                            <th>Nom(s) & Prénom(s)</th>
+                            <th>Ancienne spécialité</th>
+                            <th>Spécialité de destination</th>
+                            <th>Motif du changement</th>
+                            <th>Effectué le </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @i
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(Model => item.Inscription.Matricule.LibelleMatricule) 
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(Model => item.Inscription.DemandeAdmission.Candidat.Personne.Nom ) @Html.DisplayFor(modelItem => item.Inscription.DemandeAdmission.Candidat.Personne.Prenom )
+                                </td>
+                                <td>
+                                    @foreach (var sp in ViewBag.specialiteList)
+                                    {
+                                        @if (sp.Id == Guid.Parse(item.PastFiliere))
+                                        {
+                                            past = sp.Libelle;
+                                            break;
+                                        }
+                                    }
+                                    @past
+
+                                </td>
+                                <td>
+                                    @foreach (var sp in ViewBag.specialiteList)
+                                    {
+                                        @if (sp.Id == Guid.Parse(item.NextFiliere))
+                                        {
+                                            next = sp.Libelle;
+                                            break;
+                                        }
+                                    }
+                                    @next
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MotifChangement)
+                                </td>    
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AddedDate)
+                                </td>
+
+                            </tr>
+                            i++;
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

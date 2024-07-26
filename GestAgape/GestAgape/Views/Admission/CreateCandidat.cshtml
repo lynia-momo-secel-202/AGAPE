@@ -1,0 +1,254 @@
+﻿@model GestAgape.Core.ViewModels.CandidatVM
+
+@{
+    ViewData["Title"] = "Créer un candidat";
+    ViewData["Module"] = "Admission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="CreateCandidat" enctype="multipart/form-data">
+    <img style="display:block; margin: 0px auto;" id="loader" src="~/img/loader.gif">
+    <div class="form-group row col-12">
+        <div class="col-12" id="response_message_case"></div>
+        <div class="form-group col-4">
+            <label asp-for="Nom" class="control-label">Nom <span class="" style="color:red"> *</span></label>
+            <input asp-for="Nom" class="form-control form-control-sm" placeholder="Veuillez entrer le nom du candidat" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Prenom" class="control-label">Prénom <span class="" style="color:red"> *</span></label>
+            <input asp-for="Prenom" class="form-control form-control-sm " placeholder="Veuillez entrer le prénom du candidat" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Telephone" class="control-label">Téléphone <span class="" style="color:red"> *</span></label>
+            <input asp-for="Telephone" class="form-control form-control-sm" placeholder="Veuillez entrer le téléphone du candidat" />
+        </div>
+    </div>
+    <div class="form-group row col-12">
+        <div class="form-outline col-4">
+            <label asp-for="DateNaissance" class="form-label">Date de Naissance<span class="" style="color:red"> *</span></label>
+            <input asp-for="DateNaissance" max="@DateTime.Now.AddYears(-12).ToShortDateString()" class="form-control form-control-sm" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="LieuNaissance" class="control-label">Lieu de naissance <span class="" style="color:red"> *</span></label>
+            <input asp-for="LieuNaissance" class="form-control form-control-sm" placeholder="Veuillez entrer son lieu de naissance" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Email" class="control-label">Adresse E-mail <span class="" style="color:red"> *</span></label>
+            <input asp-for="Email" class="form-control form-control-sm" placeholder="Veuillez entrer son adresse e-mail" />
+        </div>
+    </div>
+
+    <div class="form-group row col-12">
+        <div class="form-group col-4">
+            <label asp-for="NomPere" class="control-label"> Nom du père</label>
+            <input asp-for="NomPere" class="form-control form-control-sm" placeholder="Veuillez entrer le nom de son père" />
+        </div>
+
+        <div class="form-group col-4">
+            <label asp-for="ProfessionPere" class="control-label">Profession du père</label>
+            <input asp-for="ProfessionPere" class="form-control form-control-sm" placeholder="Veuillez entrer la profession de son père" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="TelephonePere" class="control-label">Téléphone du père</label>
+            <input asp-for="TelephonePere" class="form-control form-control-sm" placeholder="Veuillez entrer le contact de son père" />
+        </div>
+    </div>
+
+    <div class="form-group row col-12">
+        <div class="form-group col-4">
+            <label asp-for="NomMere" class="control-label">Nom de la mère</label>
+            <input asp-for="NomMere" class="form-control form-control-sm" placeholder="Veuillez entrer le nom de sa mère" />
+        </div>
+
+        <div class="form-group col-4">
+            <label asp-for="ProfessionMere" class="control-label">Profession de la mère</label>
+            <input asp-for="ProfessionMere" class="form-control form-control-sm" placeholder="Veuillez entrer la profession de sa mère" />
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="TelephoneMere" class="control-label">Téléphone de la mère</label>
+            <input asp-for="TelephoneMere" class="form-control form-control-sm" placeholder="Veuillez entrer le contact de sa mère" />
+        </div>
+
+
+    </div>
+
+    <div class="form-group row col-12">
+
+        <div class="form-group col-4">
+
+            <label asp-for="StatutMatrimonial" class="form-label">Statut Matrimonial </label>
+            <select asp-for="StatutMatrimonial" class="form-control form-control-sm">
+                <option disabled>selectionne le statut matrimonial</option>
+                <option value="Celibataire">Celibataire</option>
+                <option value="Marié(e)">Marié(e)</option>
+                <option value="Veuve">Veuve</option>
+                <option value="Divorcé">Divorcé</option>
+            </select>
+
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Nationalite" class="control-label">Nationalité <span class="" style="color:red"> *</span></label>
+            <input asp-for="Nationalite" class="form-control form-control-sm" />
+            <span asp-validation-for="Nationalite" class="text-danger"></span>
+        </div>
+        <div class="form-group col-4">
+            <label asp-for="Langue" class="control-label">Langue <span class="" style="color:red"> *</span></label>
+            <input asp-for="Langue" class="form-control form-control-sm" />
+            <span asp-validation-for="Langue" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row col-12">
+
+        <div class="form-group col-4">
+            <label asp-for="PhotoFile" class="control-label">Photo</label>
+            <input asp-for="PhotoFile" class="form-control form-control-sm" />
+            <span asp-validation-for="PhotoFile" class="text-danger"></span>
+        </div>
+        <div class="form-outline col-md-4">
+            <label asp-for="Sexe" class="form-label">Genre </label>
+            <select asp-for="Sexe" class="form-control form-control-sm">
+                <option> Masculin </option>
+                <option> Feminin </option>
+            </select>
+        </div>
+        <div class="form-outline col-md-4 mt-8">
+            <div class="row mt-3">
+                <label asp-for="Handicape" class=" col-5">
+                    Handicape?
+                </label>
+                <br />
+                <label class="row col-3">
+                    <input asp-for="Handicape" type="radio" class="form-control-sm" value="false" checked onclick="afftext('hidden');" />  &nbsp;&nbsp;&nbsp;&nbsp; Non
+                </label>
+                <label class="row col-3">
+                    <input asp-for="Handicape" type="radio" class="form-control-sm" value="true" onclick="afftext('visible');" /> &nbsp;&nbsp;&nbsp;&nbsp;  Oui
+                </label>
+            </div>
+            <input asp-for="HandicapeDes" id="Handicapetext" class="form-control form-control-sm" placeholder="Entrez une brève description de l'handicape" />
+        </div>
+
+    </div>
+    <div class="form-group row col-12">
+
+        <div class="form-group col-6">
+            <label asp-for="Quartier" class="control-label">Lieu de résidence <span class="" style="color:red"> *</span></label>
+            <input asp-for="Quartier" class="form-control form-control-sm" />
+        </div>
+        <div class="form-group col-6">
+            <label asp-for="Etablissement" class="control-label">Etablissement <span class="" style="color:red"> *</span></label>
+            <input asp-for="Etablissement" class="form-control form-control-sm" />
+        </div>
+    </div>
+
+    <div class="form-group row col-12">
+
+        <div class="form-group  col-12">
+            <label asp-for="Vision" class="control-label">Vision</label>
+            <input asp-for="Vision" class="form-control form-control-sm" cols="20" row="10">
+        </div>
+    </div>
+
+    <div class="form-group  ">
+        <button type="reset" class="btnperso" style="background-color: #e81d27; border:#e81d27; float: left;">Annuler</button>
+        <button type="submit" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right ">Valider</button>
+    </div>
+</form>
+
+
+<a asp-action="Candidat" style="margin-top:14px;">
+
+    <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         width="40px" height="40px" viewBox="0 0 46.032 46.033"
+         xml:space="preserve">
+    <g>
+    <g>
+    <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#22a9e1" />
+    <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#22a9e1" />
+                            </g>
+                            </g>
+                        </svg>
+
+</a>
+
+
+<!-- handicap -->
+<script type="text/javascript">
+    const Handicapetext = document.querySelector("#Handicapetext");
+    Handicapetext.style.visibility = "hidden";
+    function afftext(etat) {
+        document.getElementById("Handicapetext").style.visibility = etat;
+    }
+</script>
+<script>
+
+    const formElem = document.querySelector("form");
+    $("#loader").hide();
+    $('form').submit(function (e) {
+        $("#loader").show();
+        let errorMessages = "";
+        e.preventDefault();
+        //Swal.fire('Any fool can use a computer')
+        var data = $('form').serializeArray().reduce(function (obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
+        data.PhotoFile = $('input[type=file]')[0].files[0];
+        // data.CurriculumVitaeFile = $('input[type=file]')[1].files[0];
+        console.log(data);
+        axios({
+            url: "@Url.Action("CreateCandidat", "Admission")",
+            method: 'POST',
+            data: data,
+            headers: {
+                "content-type": "multipart/form-data"
+            }
+        })
+            .then(response => {
+                if (response.data.isValid == true) {
+                    Swal.fire(
+                        'Réussi',
+                        response.data.message,
+                        'success'
+                    );
+                    console.log("Data", response.data);
+                    window.location.href = "CreateDemandeAdmission/" + response.data.data;
+                } else {
+                    Swal.fire(
+                        'Echec',
+                        response.data.message,
+                        'warning'
+                    );
+                    $("#response_message_case").html('<div class="alert alert-warning" role="alert" id="response_message_case">' + response.data.message + '</div>');
+                }
+                $("#loader").hide();
+                console.log("OK", response);
+            })
+            .catch(error => {
+                for (let err of error.response.data.validationMessages) {
+                    errorMessages += err + "</br>";
+                }
+                Swal.fire(
+                    'Echec',
+                    error.response.message,
+                    'error'
+                );
+                $("#response_message_case").html('<div class="alert alert-danger" role="alert" id="response_message_case">' + errorMessages + '</div>');
+                $("#loader").hide();
+            });
+        return false;
+
+    });
+</script>
+<style>
+
+    #response_message_case {
+        font-size: 12px;
+    }
+</style>

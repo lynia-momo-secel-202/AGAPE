@@ -1,0 +1,19 @@
+﻿.btnperso {
+    border-radius: 15px;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 10px 40px;
+    margin-top:15px;
+}
+label.required:after {
+    content: '*';
+    margin-left: 4px;
+    color: #e81d27
+}

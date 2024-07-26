@@ -1,0 +1,311 @@
+﻿@model GestAgape.Core.Entities.Admission.DossierPersonnel
+
+@{
+    ViewData["Title"] = "Le dossier du candidat " + Model.Candidat.Code + " : " + Model.Candidat.Personne.Nom + " " + Model.Candidat.Personne.Prenom;
+    ViewData["Module"] = "Admission";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Le dossier de @Model.Candidat.Personne.Nom @Model.Candidat.Personne.Prenom est constitué de :</h2>
+
+
+<div class="row">
+    <div class="form-group col-md-12">
+        <a asp-action="DossierPersonnel" data-placement="top" data-toggle="tooltip" data-original-title="Liste des Dossier" style="float: left;">
+
+            <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="40px" height="40px" viewBox="0 0 46.032 46.033"
+                 xml:space="preserve">
+            <g>
+            <g>
+            <path d="M8.532,18.531l8.955-8.999c-0.244-0.736-0.798-1.348-1.54-1.653c-1.01-0.418-2.177-0.185-2.95,0.591L1.047,20.479
+			                    c-1.396,1.402-1.396,3.67,0,5.073l11.949,12.01c0.771,0.775,1.941,1.01,2.951,0.592c0.742-0.307,1.295-0.918,1.54-1.652l-8.956-9
+			                    C6.07,25.027,6.071,21.003,8.532,18.531z" fill="#22a9e1" />
+            <path d="M45.973,31.64c-1.396-5.957-5.771-14.256-18.906-16.01v-5.252c0-1.095-0.664-2.082-1.676-2.5
+			                    c-0.334-0.138-0.686-0.205-1.033-0.205c-0.705,0-1.398,0.276-1.917,0.796L10.49,20.479c-1.396,1.402-1.396,3.669-0.001,5.073
+			                    l11.95,12.009c0.517,0.521,1.212,0.797,1.92,0.797c0.347,0,0.697-0.066,1.031-0.205c1.012-0.418,1.676-1.404,1.676-2.5V30.57
+			                    c4.494,0.004,10.963,0.596,15.564,3.463c0.361,0.225,0.77,0.336,1.176,0.336c0.457,0,0.91-0.139,1.297-0.416
+			                    C45.836,33.429,46.18,32.515,45.973,31.64z" fill="#22a9e1" />
+                            </g>
+                            </g>
+                        </svg>
+        </a>
+        <a asp-action="UpdateDossierPersonnel" asp-route-Id="@Model.Id" class="btnperso" data-placement="top" data-toggle="tooltip" data-original-title="Ajouter un autre fichier a ce dossier" style="float: right;">
+
+            <svg style="height:25px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#22a9e1">
+                <path d="m256 8c-137 0-248 111-248 248s111 248 248 248 248-111 248-248-111-248-248-248zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12z" />
+            </svg>
+        </a>
+    </div>
+
+    @if (Model.ActeNaissance != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Acte de Naissance</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ActeNaissance}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ActeNaissance}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir l'acte de naissance</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Photos != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Photo du candidat</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.Photos}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.Photos}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir la photo</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.CNI != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>CNI</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.CNI}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.CNI}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir la CNI</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveBac != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve du BAC</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ReleveBac}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveBac}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir la Releve</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveNiveau1 != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve niveau 1</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ReleveNiveau1}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveNiveau1}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir la photo</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveNiveau2 != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve du Niveau2</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ReleveNiveau2}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveNiveau2}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir le releve</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveBTS != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve BTS</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ReleveBTS}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveBTS}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir le releve</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveLicence != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve de Licence</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{ Model.ReleveLicence}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveLicence}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir le Releve</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.ReleveMaster1 != null)
+    {
+        <div class="col-md-6 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Releve de Master1</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li>
+                            <a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <br />
+                    <object data=@Url.Content($"~/Data/DossierFolder/{Model.ReleveMaster1}") width="100%" height="400px"></object>
+                    <div class="form-group row">
+                        <div class="col-md-5 offset-md-3">
+                            <a target="_blank" href="@Url.Content($"~/Data/DossierFolder/{ Model.ReleveMaster1}")" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;">voir le releve</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    }
+
+    @*{Model.Candidat.Personne.Nom}_{Model.Candidat.Personne.Prenom}/*@
+    @*<object data="~/data/profileimagefolder/file_1698264647878_lyniamomo@gmail.com_lynia.png" width="100%" height="400px"></object>*@
+    @*<a target="_blank" asp-action="EditPhoto" asp-route="@Url.Content($"~/Data/{ Model.Photos}")" class="btn btn-primary">editer la photo</a>*@
+</div>

@@ -1,0 +1,188 @@
+﻿@model IEnumerable<GestAgape.Core.Entities.Admission.DossierPersonnel>
+
+@{
+    ViewData["Module"] = "Admission";
+    ViewData["Title"] = "Liste des dossiers personnels";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+
+<p class="mb-3"><p>
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box table-responsive">
+                    <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th> Candidat</th>
+                            <th> Contact</th>
+                            <th>Acte de naissance</th>
+                            <th>CNI</th>
+                            <th>Photo</th>
+                            <th>Relevé du Bac</th>
+                            <th>Relevé niveau 1</th>
+                            <th>Relevé niveau 2</th>
+                            <th>Relevé BTS</th>
+                            <th>Relevé Licence</th>
+                            <th>Relevé Master 1</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td scope="row"> @i </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Candidat.Personne.Nom) @Html.DisplayFor(modelItem => item.Candidat.Personne.Prenom)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Candidat.Personne.Telephone)
+                                </td>
+                                <td>
+                                    @if (item.ActeNaissance == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.CNI == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Photos == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveBac == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveNiveau1 == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveNiveau2 == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveBTS == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveLicence == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.ReleveMaster1 == null)
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-danger">
+                                            <a href="#"><i class="fa fa-square-o"></i> Abscent</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fa-hover col-md-3 col-sm-4 text-primary">
+                                            <a href="#"><i class="fa fa-check-square-o"></i> Present</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                        <a asp-action="DetailsDossierPersonnel" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Voir le dossier" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px;">
+                                        <i class="fa fa-eye"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a asp-action="UpdateDossierPersonnel" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Completer le dossier" asp-route-id="@item.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

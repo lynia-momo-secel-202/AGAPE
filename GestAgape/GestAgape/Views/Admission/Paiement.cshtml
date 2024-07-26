@@ -1,0 +1,195 @@
+﻿@using GestAgape.Core.Entities.Admission;
+@using GestAgape.Core.Entities.Scolarite;
+@model IEnumerable<GestAgape.Core.Entities.Admission.Paiement>
+@{
+    int i = 1;
+    string action, controller, motif, codmat;
+    double? montantTot = 0;
+    var dd = ViewBag.dateDebut;
+    var df = ViewBag.dateFin;
+    var today = DateTime.Now.Date;
+    string? moyen = "";
+    string rep = "";
+    if ((dd == today && df == today)
+    || (dd > today && df > today)
+    || dd > df)
+    {
+        rep = " aujourd'hui";
+
+    }
+    else
+    {
+        rep = " du " + dd.ToShortDateString() + " au " + df.ToShortDateString();
+    }
+
+    ViewData["Title"] = "Historique des paiements enregistrés" + rep;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Module"] = "Admission";
+}
+
+
+@*diffents filtres*@
+<form action="Paiement">
+    <div class="row fw-bold mb-4 ml-2" style="color: #22a9e1;">
+        <div class="row col-6 mb-2 ml-5">
+            Afficher les versements enregistrés pendant une période
+        </div>
+        <div class="row ">
+            <div class="col-sm ">
+                Date de d&eacute;but
+                <input name="datedebut" type="date" max="@DateTime.Now.AddDays(0).ToString("yyyy-MM-dd")" id="start" class="p-1 rounded-2" />
+            </div>
+
+            <div class="col-sm">
+                Date de fin
+                <input name="datefin" type="date" max="@DateTime.Now.AddDays(0).ToString("yyyy-MM-dd")" id="end" class="p-1 rounded-2" />
+            </div>
+            <div class="col-sm">
+                Montant total encaissé
+                @foreach (Paiement paie in ViewBag.Paiements)
+                {
+                    @if (paie != null)
+                    {
+                        montantTot = montantTot + paie.Montant;
+                    }
+                }
+                <input value="@montantTot FCFA" class="p-1 rounded-2" readonly />
+            </div>
+            <div class="col-sm mt-1">
+                <input class=" btnperso" type="submit" value="Filtrer" class="btnperso" style="background-color: #22a9e1; border: #22a9e1;float: right " />
+            </div>
+            <div class="col-sm mt-1">
+                <button class="btnperso" style="background-color: #22a9e1; border: #22a9e1 " onclick="reload()">Voir tout </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="x_content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box table-responsive">
+                <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr style="color: #22a9e1;">
+                            <th>#</th>
+                            <th>Matricule/code</th>
+                            <th>Nom (s) & Prénom (s)</th>
+                            <th>Classe</th>
+                            <th>Montant</th>
+                            <th>Motif</th>
+                            <th>Mode de paiement</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        @foreach (var item in Model)
+                        {
+                            switch (item.Motif)
+                            {
+                                case Motif.FraisScolarite:
+                                    action = "PrintRecuPaiementScolarite";
+                                    controller = "Scolarite";
+                                    motif = "Paiement Frais de Scolarité";
+                                    break;
+                                case Motif.FraisSoutenance:
+                                    action = "PrintRecuPaiementFraisSoutenance";
+                                    controller = "Scolarite";
+                                    motif = "Paiement Frais de soutenance";
+                                    break;
+                                case Motif.FraisMedicaux:
+                                    action = "PrintRecuPaiementFraisMedicaux";
+                                    controller = "Scolarite";
+                                    motif = "Paiement Frais Medicaux";
+                                    break;
+                                case Motif.FraisInscription:
+                                    action = "PrintRecuPaiementInscription";
+                                    controller = "Scolarite";
+                                    motif = "Paiement Frais d'inscription";
+                                    break;
+                                case Motif.FraisDossierExamen:
+                                    action = "PrintRecuPaiementFraisDossierExamen";
+                                    controller = "Scolarite";
+                                    motif = "Paiement Frais de dossier d'examen ";
+                                    break;
+                                case Motif.FraisConcours:
+                                    action = "PrintRecuPaiement";
+                                    controller = "Admission";
+                                    motif = "Paiement Frais de concours";
+                                    break;
+                                case Motif.FraisEtudeDossier:
+                                    action = "PrintRecuPaiement";
+                                    controller = "Admission";
+                                    motif = "Paiement Frais d'etude de dossier";
+                                    break;
+                                default:
+                                    action = "Paiement";
+                                    controller = "Admission";
+                                    motif = "ce paiement n'a pas de motif";
+                                    break;
+                            }
+
+                            <tr>
+                                <td> @i </td>
+                                <td>
+                                    @if (item.DemandeAdmission.InscriptionId != null)
+                                    {
+                                        codmat = item.DemandeAdmission.Inscription.Matricule.LibelleMatricule;
+                                    }
+                                    else
+                                    {
+                                        codmat = item.DemandeAdmission.Candidat.Code;
+                                    }
+                                    @codmat
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Nom) @Html.DisplayFor(modelItem => item.DemandeAdmission.Candidat.Personne.Prenom)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DemandeAdmission.Classe.Code)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Montant)</td>
+                                <td>@motif</td>
+                                @if (item.Modepaiement == Modepaiement.Cheque)
+                                {
+                                    moyen = "Chèque";
+                                }
+                                else
+                               if (item.Modepaiement == Modepaiement.Espece)
+                                {
+                                    moyen = "Espèce";
+                                }
+                                else
+                               if (item.Modepaiement == Modepaiement.VersementBancaire)
+                                {
+                                    moyen = "Versement bancaire";
+                                }
+                                else
+                               if (item.Modepaiement == Modepaiement.OrangeMoney)
+                                {
+                                    moyen = "Orange Money";
+                                }
+                                else
+                               if (item.Modepaiement == Modepaiement.MobileMoney)
+                                {
+                                    moyen = "Mobile Money";
+                                }
+                                else
+                                {
+                                    moyen = "Autre";
+                                }
+                                <td>@moyen</td>
+
+                                <td>@item.AddedDate.ToShortDateString()</td>
+                                <td>
+                                    <a asp-action=@action asp-controller=@controller type="button" data-placement="top" data-toggle="tooltip" data-original-title="Imprimer le recu de paiement" asp-route-id="@item.Id" style="color:rgb(0,94,0); font-size:20px; margin-right:28%">
+                                        <i class="fa fa-print"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

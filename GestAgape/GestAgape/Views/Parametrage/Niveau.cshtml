@@ -1,0 +1,56 @@
+﻿@model IEnumerable<GestAgape.Core.Entities.Parametrage.Niveau>
+
+@{
+    ViewData["Title"] = "Liste des niveaux";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Module"] = "Paramétrage";
+
+    int i = 1;
+}
+
+
+
+<p class="mb-3"><p>
+    <a asp-action="CreateNiveau">
+        <svg style="height:25px" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#22a9e1">
+            <path d="m256 8c-137 0-248 111-248 248s111 248 248 248 248-111 248-248-111-248-248-248zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12z" />
+        </svg>
+    </a>
+    <div class="x_content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box table-responsive">
+                    <table id="datatable" class="table table-sm table-striped table-bordered" style="width:100%">
+                        <thead>
+                            <tr style="color: #22a9e1;">
+                                <th>#</th>
+                                <th>Libellé du niveau</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+                                    <td>
+                                        @i
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Libelle)
+                                    </td>
+                                    <td style="text-align:center">
+                                        <a asp-action="UpdateNiveau" type="button" data-placement="top" data-toggle="tooltip" data-original-title="Modifier le niveau" asp-route-id="@item.Id" style="color:rgb(189,165,28); font-size:20px;">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                    i++;
+                                }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
